@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\UserLevel;
 use App\Models\UserlevelPermission;
+use Illuminate\Support\Facades\Config;
 
 class UserLevelController extends Controller
 {
@@ -61,13 +62,27 @@ class UserLevelController extends Controller
         return redirect()->route('userlevel.index')->with('success', 'ลบ Role สำเร็จ!');
     }
 
+    // public function editPermissions($id)
+    // {
+    //     $role = UserLevel::findOrFail($id);
+    //     $permissions = $role->permissions()->get();
+
+    //     $models = ['users', 'userlevel', 'products'];
+    //     $methods = ['list', 'add', 'edit', 'delete'];
+
+    //     return view('userlevel.permissions', compact('role', 'permissions', 'models', 'methods'));
+    // }
+
     public function editPermissions($id)
     {
         $role = UserLevel::findOrFail($id);
         $permissions = $role->permissions()->get();
 
-        $models = ['users', 'userlevel', 'products'];
-        $methods = ['list', 'add', 'edit', 'delete'];
+        // ดึง model จาก config/menu.php
+        $menuItems = Config::get('menu.sidebar', []);
+        $models = collect($menuItems)->pluck('model', 'label');
+
+        $methods = ['view', 'add', 'edit', 'delete']; // ใช้ชื่อที่ตรงกับ value checkbox
 
         return view('userlevel.permissions', compact('role', 'permissions', 'models', 'methods'));
     }

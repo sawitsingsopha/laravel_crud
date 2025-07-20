@@ -75,7 +75,9 @@ x-data="{ page: 'ecommerce', 'loaded': true, 'darkMode': false, 'stickyMenu': fa
 
         <!-- ===== Main Content Start ===== -->
         <main>
-            @yield('content')
+            <div class="mx-auto max-w-(--breakpoint-2xl) p-4 md:p-6">
+                @yield('content')
+            </div>
         </main>
         <!-- ===== Main Content End ===== -->
         </div>
