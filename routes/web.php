@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\UserLevelController;
 
 // ✅ Example Routes: routes/web.php
 // use App\Http\Controllers\UserController;
@@ -20,6 +21,8 @@ use App\Http\Controllers\UserController;
 
 
 // ✅ Example Routes: routes/web.php
+
+// users
 Route::middleware(['web','auth'])->group(function () {
     Route::get('/users', [UserController::class, 'index'])
         ->name('users.index')
@@ -49,6 +52,21 @@ Route::middleware(['web','auth'])->group(function () {
         ->name('users.destroy')
         ->middleware('check.permission:users,delete');
 });
+
+// userlevel
+Route::middleware(['web','auth'])->group(function () {
+    Route::resource('userlevel', UserLevelController::class)
+        ->middleware('check.permission:userlevel,list');
+
+    Route::get('userlevel/{id}/permissions', [UserLevelController::class, 'editPermissions'])
+        ->name('userlevel.permissions')
+        ->middleware('check.permission:userlevel,edit');
+
+    Route::post('userlevel/{id}/permissions', [UserLevelController::class, 'updatePermissions'])
+        ->name('userlevel.permissions.update')
+        ->middleware('check.permission:userlevel,edit');
+});
+
 
 Route::get('/test-permission', function () {
     return 'Permission OK';
